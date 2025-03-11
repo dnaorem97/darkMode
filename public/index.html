@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Portal</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background-color: #f0f0f0;
+            font-size: 16px;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 2px solid #FFFFFF;
+            margin-bottom: 4px;
+        }
+
+        nav {
+            border-bottom: 2px solid black;
+        }
+
+        .nav-link {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-link li {
+            font-size: larger;
+            padding: 4px;
+        }
+
+        .main-container {
+            background-color: white;
+            min-height: 78vh;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 2rem;
+            gap: 2rem;
+        }
+
+        .item {
+            border-radius: 8px;
+            text-align: center;
+            background-color: black;
+            color: white;
+            min-height: 150px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            font-weight: 500;
+            overflow: hidden;
+        }
+
+        .news-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .news-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .news-description {
+            font-style: italic;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .news-content {
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        .news-image {
+            width: 100%;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        /* medium screens */
+        @media (max-width: 48em) {
+            .main-container {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 1.5rem;
+            }
+        }
+
+        /* Small screens */
+        @media (max-width: 30em) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .nav-link li {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="title">
+            <h1>News Portal</h1>
+        </div>
+        <nav>
+            <ul class="nav-link">
+                <li>Home</li>
+                <li>News</li>
+                <li>Sport</li>
+                <li>Business</li>
+                <li>Culture</li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <div class="item">
+            <!-- News content  -->
+        </div>
+        <div class="item">Item 2</div>
+        <div class="item">Item 3</div>
+    </main>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    const url = "http://localhost:4000/news"; // Match backend port
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const mainContainer = document.querySelector('.main-container');
+            mainContainer.innerHTML = ''; // Clear existing content
+
+            if (data.length === 0) {
+                mainContainer.innerHTML = '<p>No news available</p>';
+                return;
+            }
+
+            data.forEach(news => {
+                const newsItem = document.createElement('div');
+                newsItem.classList.add('item');
+
+                newsItem.innerHTML = `
+                    <img src="${news.image}" alt="${news.title}" class="news-image">
+                    <h2 class="news-title">${news.title}</h2>
+                    <p class="news-description">${news.description}</p>
+                    <p class="news-content">${news.content}</p>
+                `;
+
+                mainContainer.appendChild(newsItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching news:', error);
+            document.querySelector('.main-container').innerHTML = '<p>Failed to load news</p>';
+        });
+});
+
+    </script>
+</body>
+
+</html>
