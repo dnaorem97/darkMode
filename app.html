@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Media Query</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+       
+        :root {
+            --body-bg: #f9f9f9;
+            --body-color: #333;
+            --header-bg: #f8f0e3;
+            --header-color: #444;
+            --main-bg: #1e90ff;
+            --item-bg: #ffffff;
+            --item-color: #333;
+            --item-shadow: rgba(0,0,0,0.1);
+            --item-hover-shadow: rgba(0,0,0,0.2);
+        }
+        
+        .dark-mode {
+            --body-bg: #222;
+            --body-color: #f0f0f0;
+            --header-bg: #2a2118;
+            --header-color: #f8f0e3;
+            --main-bg: #1a4b7c;
+            --item-bg: #333;
+            --item-color: #fff;
+            --item-shadow: rgba(0,0,0,0.3);
+            --item-hover-shadow: rgba(0,0,0,0.5);
+        }
+       
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--body-color);
+            background-color: var(--body-bg);
+            transition: all 0.3s ease;
+        }
+       
+        header {
+            background-color: var(--header-bg);
+            height: 12vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            box-shadow: 0 2px 5px var(--item-shadow);
+            transition: all 0.3s ease;
+        }
+       
+        header h3 {
+            font-size: 1.5rem;
+            color: var(--header-color);
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .toggle-label {
+            margin-right: 10px;
+            font-weight: 500;
+        }
+        
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .slider:after {
+            content: '☀️';
+            position: absolute;
+            left: 8px;
+            top: 6px;
+            font-size: 14px;
+            opacity: 1;
+            transition: .4s;
+        }
+        
+        input:checked + .slider:after {
+            content: '🌙';
+            left: 34px;
+        }
+       
+        .main-container {
+            background-color: var(--main-bg);
+            min-height: 78vh;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 2rem;
+            gap: 2rem;
+            transition: all 0.3s ease;
+        }
+       
+        .item {
+            border-radius: 8px;
+            text-align: center;
+            background-color: var(--item-bg);
+            color: var(--item-color);
+            min-height: 150px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            box-shadow: 0 4px 6px var(--item-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+       
+        .item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px var(--item-hover-shadow);
+        }
+       
+        /* Medium screens */
+        @media (max-width: 992px) {
+            .main-container {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 1.5rem;
+                gap: 1.5rem;
+            }
+        }
+       
+        /* Small screens */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+                gap: 1rem;
+            }
+           
+            header {
+                padding: 0 1rem;
+            }
+           
+            .item {
+                padding: 1.5rem;
+            }
+            
+            .toggle-label {
+                display: none;
+            }
+        }
+       
+        /* Landscape orientation */
+        @media (orientation: landscape) {
+            .main-container {
+                background-color: var(--main-bg);
+                filter: brightness(1.2);
+            }
+           
+            .item {
+                border-left: 4px solid #1e90ff;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h3>Advanced Media Query</h3>
+        <div class="toggle-container">
+            <span class="toggle-label">Dark Mode</span>
+            <label class="theme-switch">
+                <input type="checkbox" id="theme-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+    </header>
+    <main class="main-container">
+        <div class="item">Item 1</div>
+        <div class="item">Item 2</div>
+        <div class="item">Item 3</div>
+    </main>
+
+    <script>
+        const toggleSwitch = document.getElementById('theme-toggle');
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            toggleSwitch.checked = true;
+        }
+        
+        // Check system preference on first load if no saved preference
+        if (!localStorage.getItem('darkMode')) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+                toggleSwitch.checked = true;
+            }
+        }
+        
+        // Toggle dark mode
+        toggleSwitch.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+    </script>
+</body>
+</html>
